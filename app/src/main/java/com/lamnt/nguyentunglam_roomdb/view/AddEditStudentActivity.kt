@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.lamnt.nguyentunglam_roomdb.R
 import com.lamnt.nguyentunglam_roomdb.model.Student
+import com.lamnt.nguyentunglam_roomdb.utils.ValidateUtil
 import com.lamnt.nguyentunglam_roomdb.viewmodel.StudentViewModel
 import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -53,19 +54,21 @@ class AddEditStudentActivity : AppCompatActivity() {
     }
 
     private fun actionClick() {
-        btnAction.setOnClickListener {
-            val student = Student(
-                edtId.text.toString(),
-                edtName.text.toString(),
-                rbMale.isChecked,
-                edtMath.text.toString().toFloat(),
-                edtPhysical.text.toString().toFloat(),
-                edtChemistry.text.toString().toFloat()
-            )
-            if (mode == "add") {
-                addStudent(student)
-            } else {
-                editStudent(student)
+        if (validateStudent()) {
+            btnAction.setOnClickListener {
+                val student = Student(
+                    edtId.text.toString(),
+                    edtName.text.toString(),
+                    rbMale.isChecked,
+                    edtMath.text.toString().toFloat(),
+                    edtPhysical.text.toString().toFloat(),
+                    edtChemistry.text.toString().toFloat()
+                )
+                if (mode == "add") {
+                    addStudent(student)
+                } else {
+                    editStudent(student)
+                }
             }
         }
     }
@@ -127,5 +130,33 @@ class AddEditStudentActivity : AppCompatActivity() {
                 }
 
             })
+    }
+
+    private fun validateStudent(): Boolean {
+        if (ValidateUtil.isNullOrEmpty(edtId.text.toString().trim())) {
+            Toast.makeText(this, "Vui lòng nhập mã sinh viên!", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (ValidateUtil.isNullOrEmpty(edtName.text.toString().trim())) {
+            Toast.makeText(this, "Vui lòng nhập tên sinh viên!", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (ValidateUtil.isNullOrEmpty(edtMath.text.toString().trim())) {
+            Toast.makeText(this, "Vui lòng nhập điểm toán!", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (ValidateUtil.isNullOrEmpty(edtPhysical.text.toString().trim())) {
+            Toast.makeText(this, "Vui lòng nhập điểm lý!", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (ValidateUtil.isNullOrEmpty(edtChemistry.text.toString().trim())) {
+            Toast.makeText(this, "Vui lòng nhập điểm hoá!", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
     }
 }
