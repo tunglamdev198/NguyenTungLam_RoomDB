@@ -54,8 +54,8 @@ class AddEditStudentActivity : AppCompatActivity() {
     }
 
     private fun actionClick() {
-        if (validateStudent()) {
-            btnAction.setOnClickListener {
+        btnAction.setOnClickListener {
+            if (validateStudent()) {
                 val student = Student(
                     edtId.text.toString(),
                     edtName.text.toString(),
@@ -64,6 +64,7 @@ class AddEditStudentActivity : AppCompatActivity() {
                     edtPhysical.text.toString().toFloat(),
                     edtChemistry.text.toString().toFloat()
                 )
+
                 if (mode == "add") {
                     addStudent(student)
                 } else {
